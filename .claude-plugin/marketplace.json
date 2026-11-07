@@ -1,0 +1,12 @@
+{
+  "name": "askara",
+  "description": "Marketplace plugin Askara Digital",
+  "owner": { "name": "Bryan Anggara" },
+  "plugins": [
+    {
+      "name": "nisha",
+      "source": "./plugins/nisha",
+      "description": "Nisha orchestrator + skill agentic-deterministic untuk Askara Digital"
+    }
+  ]
+}
