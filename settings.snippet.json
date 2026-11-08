@@ -3,5 +3,5 @@
     "askara": { "source": { "source": "github", "repo": "bryanggara/Nisha" } }
   },
   "enabledPlugins": { "nisha@askara": true },
-  "agent": "nisha@askara:nisha"
+  "agent": "nisha:nisha"
 }
