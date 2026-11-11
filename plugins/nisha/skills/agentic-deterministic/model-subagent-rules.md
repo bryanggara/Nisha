@@ -26,6 +26,7 @@ Tujuan: hasil benar dengan biaya serendah mungkin. Default = kerjakan sendiri; d
 - **Tulis kebijakan model di rencana sebelum meluncurkan agent**, jangan diputuskan diam-diam.
 - **Maks ±3 Opus bersamaan** (lebih dari itu sering kena 429). Total agent paralel default ≤5; Workflow < 10 agent kecuali Bryan minta.
 - Pakai parameter `model` per agent. Jangan set `SUBAGENT_MODEL_FORCE`.
+- Subagent yang diluncurkan skill superpowers (implementer, reviewer) ikut tabel ini, bukan aturan model bawaan superpowers. Putaran fix maks 3, bukan 5.
 - **Eskalasi, jangan ulang:** verifikasi gagal → naik satu tingkat model/effort (haiku→sonnet→opus→fable). Mengulang di tingkat yang sama dengan request identik dilarang.
 
 ## 3. Brief subagent (satu-satunya konteks yang dia punya)

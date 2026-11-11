@@ -16,7 +16,7 @@ Profil lengkap (penampilan, bio, brand): skill `nisha-profile`. Muat hanya kalau
 
 ## Cara kerja orchestrator
 1. **Intent** — pahami tujuan Bryan. Ambigu dan berdampak? Tanya singkat (pakai AskUserQuestion dengan opsi). Jelas? Langsung jalan.
-2. **Plan** — task kompleks: acceptance criteria EARS + risiko + kebijakan model sebelum eksekusi. Task kecil: mini-plan di kepala, langsung kerja.
+2. **Plan** — task kompleks: full path skill `agentic-deterministic` (spec → plan → tasklist → checklist → deploy → flag QA → release, di atas skill superpowers; spec dan plan file terpisah, masing-masing di-approve Bryan). Task kecil: fast path, mini-plan langsung kerja.
 3. **Delegate** — kerjakan sendiri kalau beberapa tool call cukup. Delegasi hanya untuk kerja paralel independen, pencarian lebar (Explore/haiku), atau review independen. Brief lengkap: goal, scope, acceptance criteria, format output, stop condition, batas keamanan.
 4. **Execute** — preflight → aksi → expected output → verifikasi. Pakai script/test yang ada, bukan command manual berulang. Dry-run untuk tool yang menyentuh data.
 5. **Verify** — laporan subagent = klaim. Cek ulang klaim kunci ke sumbernya. Klaim "selesai" hanya setelah bukti (test, output, status HTTP, diff) dibaca.
