@@ -87,6 +87,7 @@ Contoh: ~~"User bisa login dengan aman"~~ → `Ketika user memasukkan kredensial
 - Tool yang menyentuh data/resource eksternal → wajib **dry-run**; tool destruktif → backup atau approval gate; deploy/migrasi/cleanup → log.
 - Tidak ada tool yang diam-diam melakukan banyak hal.
 - Coding → test → commit kecil. Secret tidak pernah masuk repo (`.gitignore` untuk `.env`, kredensial, key).
+- **Angka bukti tidak diketik ulang.** Keluaran tool/konektor yang jadi bukti (hasil query, log run) disimpan ke file lewat script, mis. diekstrak dari transkrip sesi atau output tool yang tersimpan, lalu dirujuk. Menyalin angka dengan tangan = risiko salah ketik yang tidak ketahuan.
 
 ## 5. Deploy, Flag QA, Release
 
@@ -101,7 +102,11 @@ Feature flag:
 
 Skenario deploy (tulis di file release): `git status` bersih → test → build → (staging) → **approval production** → deploy flag OFF → smoke/health check → cek log error → catat. Perintah "deploy" saja tidak cukup untuk langsung deploy. Gagal setelah deploy → rollback, lalu laporkan.
 
-Flag QA: flag ON untuk internal → jalankan checklist QA (dari AC, normal + error path) → catat hasil + bukti (screenshot, output, status HTTP) → Bryan menyatakan lulus. Ada yang gagal → flag OFF, fix lewat tahap 3–5, ulang QA.
+**Bukti terikat sha → bekukan branch.** Bila bukti (dryrun migrasi, paket rilis, approval) mengikat sha tertentu, tidak ada merge ke branch itu sampai langkah yang memakai bukti selesai; kalau head bergeser, bukti tidak sah dan diulang. Selama PR rilis menunggu approval, tahan merge ke branch sumbernya (PR lain boleh dibuka, merge belakangan).
+
+**Uji migrasi terhadap target sebenarnya.** Dry-run di salinan production hanya memuat migrasi yang sudah ada di production. Migrasi yang menimpa/memakai objek dari migrasi yang baru ada di staging akan gagal di sana. Sebelum dispatch, cek irisan objek yang disentuh dengan migrasi yang belum di production; bila beririsan, urutkan (tunggu pendahulunya diterapkan) atau tulis ulang tanpa ketergantungan. PR migrasi = satu commit di atas branch integrasi (tanpa merge commit) supaya penjaga per-commit bersih.
+
+Flag QA: flag ON untuk internal → jalankan checklist QA (dari AC, normal + error path) → catat hasil + bukti (screenshot, output, status HTTP) → Bryan menyatakan lulus. Prompt QA (mis. untuk Claude in Chrome) dimulai dengan **Langkah 0: pastikan build baru** (penanda yang hanya ada di build terbaru; kalau masih lama, berhenti), format laporan tetap, dan batas aksi tulis yang eksplisit. Klaim di prompt dicek dulu ke kode/spec (fitur yang memang tidak ada di desktop jangan diminta dicek di desktop). Bila QA melakukan aksi tulis di staging, cocokkan efeknya ke DB lewat bacaan baca-saja sesudahnya. Ada yang gagal → flag OFF, fix lewat tahap 3–5, ulang QA.
 
 Release: flag ON (semua atau bertahap) → pantau error/metrik sesuai threshold di file release selama jendela pantau → masalah → flag OFF dulu, investigasi kemudian.
 
@@ -113,6 +118,7 @@ Issue → fix loop (CI/GitHub): CI gagal → baca issue + log → fix di branch 
 - Pisahkan auto-fix (bug kecil yang aman → patch + test) dari human-review (schema, payment, auth, permission, data user).
 - Setiap automation punya log, batas frekuensi, dan cara mematikan. Laporan hanya dikirim saat penting.
 - Catat semua perubahan maintenance (changelog / daily note). Tanpa audit trail = tidak boleh jalan.
+- Pembanding/paritas dua sistem wajib menilai **kesegaran** kedua sisi. Dua sisi yang sama-sama basi akan tampak identik ("lulus" palsu); statusnya harus `BASI`/tidak dihitung. Cek kesegaran juga menemukan pipeline hulu yang diam-diam berhenti.
 
 ## 6. Fast path (project kecil)
 
