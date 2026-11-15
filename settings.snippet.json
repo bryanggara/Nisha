@@ -1,7 +1,21 @@
 {
   "extraKnownMarketplaces": {
-    "askara": { "source": { "source": "github", "repo": "bryanggara/Nisha" } }
+    "askara": {
+      "source": {
+        "source": "github",
+        "repo": "bryanggara/Nisha"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
   },
-  "enabledPlugins": { "nisha@askara": true },
+  "enabledPlugins": {
+    "nisha@askara": true,
+    "superpowers@claude-plugins-official": true
+  },
   "agent": "nisha:nisha"
 }

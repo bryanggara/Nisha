@@ -29,3 +29,25 @@ Urutan prioritas: **benar → sederhana → mudah diubah**. Dipakai saat menulis
 
 ## 4. Konvensi repo menang
 Pola yang sudah ada di repo (struktur folder, gaya error handling, library) diikuti, walau berbeda dari dokumen ini. Mengubah konvensi = keputusan terpisah yang ditulis di spec.
+
+## 5. Language and naming (Bryan, 2026-11-15)
+
+Everything in a repository is written in **English**, except what end users read in the product.
+
+| Item | Language |
+|---|---|
+| Identifiers: functions, classes, types, interfaces, variables, parameters, object fields, file and folder names | English |
+| API contracts: URL paths, JSON fields, error **codes** (`shop_limit_reached`, not `batas_toko`) | English |
+| Database objects: schemas, tables, columns, functions, policies, roles, migration file names | English |
+| Environment variables, CLI flags and their values (`--once`, `WORKER_MODE=economy`) | English |
+| Web route paths (`/login`, `/signup`, `/summary`) | English |
+| Code comments, test names, commit messages, PR descriptions | English |
+| New documents (spec, plan, ADR, changelog, README); existing ones are translated gradually | English |
+| **UI copy and user-facing error messages** | Product language (Indonesian for Askara products) |
+| Chat reports to Bryan | Indonesian |
+
+Rules:
+- Domain and tax terms use the standard English accounting term in code: PPN → `vat`, HPP → `cogs`, PKP → `vatRegistered`, WIB → `Asia/Jakarta` / `jakartaTime`. Proper names stay as they are (`Rupiah`, brand and product names). Keep a glossary (local term ↔ code name) in the repo when a domain uses local terms.
+- Error codes are English and stable; the user-facing message mapped from a code is in the product language.
+- Throwaway code (spikes that are deleted or archived after the decision they inform) does not need renaming.
+- When a repo still contains non-English names, rename them in dedicated commits (one package per change, all tests passing) rather than mixing renames into feature work.
