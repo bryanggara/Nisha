@@ -42,12 +42,17 @@ Wajib memuat:
 
 Kalau tidak bisa menulis brief yang jelas, berarti belum paham tugasnya — jangan delegasi dulu.
 
+Brief untuk penulis spec/plan wajib memuat **kendala yang sudah diketahui** (pelajaran MEMORY, batas lingkungan, urutan rilis, berkas terkunci). Spec yang ditulis tanpa kendala itu akan dirombak di review. Agent spec boleh opus; minta dia mengecek irisan dengan pekerjaan yang sedang berjalan dan menulis syarat urutannya.
+
 ## 4. Agent yang menulis kode
 
 - Satu writer per set file. Agent paralel yang menulis → **worktree terpisah** + kepemilikan path eksplisit.
 - File bersama (lockfile, `package.json`, `index.ts`, barrel/registry): tunjuk satu pemilik, atau beri izin eksplisit menambah satu baris. Lockfile: ambil dari main lalu `npm install --package-lock-only`.
 - Helper bersama dibuat di awal, bukan ditemukan ulang tiap agent.
 - Setelah merge: hapus worktree & klon review (disk cepat penuh).
+- Klon dangkal satu branch (`--depth 1`) hanya melacak `main`. Sesudah push branch baru, tambahkan refspec (`git config --add remote.origin.fetch '+refs/heads/<pola>:refs/remotes/origin/<pola>'`) supaya upstream terbaca; kalau tidak, pemeriksa "commit belum di-push" memberi alarm palsu. `--force-with-lease` tanpa remote-tracking ref → tulis sha harapan eksplisit (`--force-with-lease=<branch>:<sha>`).
+- Jangan `git add -A` di worktree yang sedang dipakai agent lain (reviewer, e2e): berkas sementara mereka (config test, output) ikut ter-commit. Stage path eksplisit dan cek `git status` sebelum commit.
+- Batas berkas terlarang di brief ditulis presisi (daftar path), bukan folder umum. Larangan terlalu lebar (mis. "semua `scripts/*`") membuat agent melewatkan pekerjaan sah yang lalu harus disusul.
 
 ## 5. Verifikasi hasil agent
 
@@ -57,6 +62,8 @@ Kalau tidak bisa menulis brief yang jelas, berarti belum paham tugasnya — jang
 - Temuan dikirim balik ke **agent yang sama** (`SendMessage`), bukan agent baru.
 - Skill yang diminta dipakai? Cek di transkrip, jangan percaya klaim.
 - Status setelah jeda panjang: cek `git log`/MEMORY dulu sebelum menyebutnya.
+- "Flaky" dari agent bukan penyebab. Jalankan ulang sendiri test yang disebut flaky sebelum merge; baru terima bila lulus berulang dan sebabnya masuk akal.
+- Container/sesi restart: worktree di scratchpad dan berkas output agent biasanya selamat. Ambil laporan terakhir agent dengan script (pesan assistant terakhir di output-nya), jangan luncurkan ulang pekerjaannya.
 
 ## 6. Biaya
 
