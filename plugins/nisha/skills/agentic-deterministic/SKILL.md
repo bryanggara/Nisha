@@ -87,6 +87,7 @@ Contoh: ~~"User bisa login dengan aman"~~ → `Ketika user memasukkan kredensial
 - Tool yang menyentuh data/resource eksternal → wajib **dry-run**; tool destruktif → backup atau approval gate; deploy/migrasi/cleanup → log.
 - Tidak ada tool yang diam-diam melakukan banyak hal.
 - Coding → test → commit kecil. Secret tidak pernah masuk repo (`.gitignore` untuk `.env`, kredensial, key).
+- **Rujukan harus ada sebelum commit.** Dokumen/log yang merujuk berkas bukti: buat dan cek berkasnya dulu (script ekstraksi bisa gagal diam-diam), baru commit rujukannya. Jalankan pemeriksa dokumen/link sebelum push.
 - **Angka bukti tidak diketik ulang.** Keluaran tool/konektor yang jadi bukti (hasil query, log run) disimpan ke file lewat script, mis. diekstrak dari transkrip sesi atau output tool yang tersimpan, lalu dirujuk. Menyalin angka dengan tangan = risiko salah ketik yang tidak ketahuan.
 
 ## 5. Deploy, Flag QA, Release
@@ -106,7 +107,7 @@ Skenario deploy (tulis di file release): `git status` bersih → test → build 
 
 **Uji migrasi terhadap target sebenarnya.** Dry-run di salinan production hanya memuat migrasi yang sudah ada di production. Migrasi yang menimpa/memakai objek dari migrasi yang baru ada di staging akan gagal di sana. Sebelum dispatch, cek irisan objek yang disentuh dengan migrasi yang belum di production; bila beririsan, urutkan (tunggu pendahulunya diterapkan) atau tulis ulang tanpa ketergantungan. PR migrasi = satu commit di atas branch integrasi (tanpa merge commit) supaya penjaga per-commit bersih.
 
-Flag QA: flag ON untuk internal → jalankan checklist QA (dari AC, normal + error path) → catat hasil + bukti (screenshot, output, status HTTP) → Bryan menyatakan lulus. Prompt QA (mis. untuk Claude in Chrome) dimulai dengan **Langkah 0: pastikan build baru** (penanda yang hanya ada di build terbaru; kalau masih lama, berhenti), format laporan tetap, dan batas aksi tulis yang eksplisit. Klaim di prompt dicek dulu ke kode/spec (fitur yang memang tidak ada di desktop jangan diminta dicek di desktop). Bila QA melakukan aksi tulis di staging, cocokkan efeknya ke DB lewat bacaan baca-saja sesudahnya. Ada yang gagal → flag OFF, fix lewat tahap 3–5, ulang QA.
+Flag QA: flag ON untuk internal → jalankan checklist QA (dari AC, normal + error path) → catat hasil + bukti (screenshot, output, status HTTP) → Bryan menyatakan lulus. Prompt QA diberi versi (nama berkas atau kode laporan baru per revisi) dan saat diperbarui, sebut tegas "pakai yang ini, bukan versi sebelumnya"; laporan yang tidak memuat bagian baru = versi lama dipakai. Prompt QA (mis. untuk Claude in Chrome) dimulai dengan **Langkah 0: pastikan build baru** (penanda yang hanya ada di build terbaru; kalau masih lama, berhenti), format laporan tetap, dan batas aksi tulis yang eksplisit. Klaim di prompt dicek dulu ke kode/spec (fitur yang memang tidak ada di desktop jangan diminta dicek di desktop). Bila QA melakukan aksi tulis di staging, cocokkan efeknya ke DB lewat bacaan baca-saja sesudahnya. Ada yang gagal → flag OFF, fix lewat tahap 3–5, ulang QA.
 
 Release: flag ON (semua atau bertahap) → pantau error/metrik sesuai threshold di file release selama jendela pantau → masalah → flag OFF dulu, investigasi kemudian.
 
