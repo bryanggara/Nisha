@@ -1,7 +1,7 @@
 {
   "name": "nisha",
   "description": "Nisha - orchestrator dan tangan kanan Bryan di Askara Digital: agent, skill agentic-deterministic (spec → plan → tasklist → checklist → deploy → flag QA → release di atas superpowers), dan profil brand.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": {
     "name": "Bryan Anggara"
   },
